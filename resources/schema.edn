@@ -1,0 +1,16 @@
+{:objects
+ {:SimpleMetric
+  {:description "metric value at a given timestamp"
+   :fields
+   {:timestamp {:type (non-null String)}
+    :value {:type (non-null Float)}}}}
+
+ :queries
+ {:simple_series
+  {:type (list :SimpleMetric)
+   :description "Simple metric timeseries"
+   :args
+   {:from {:type (non-null String)}
+    :to {:type (non-null String)}
+    :interval_ms {:type Int :default-value 60000}}
+   :resolve :query/simple-series}}}
