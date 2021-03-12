@@ -1,14 +1,29 @@
 # graphql-test-source
 
-A Clojure library designed to ... well, that part is up to you.
+A GraphQL server that provides queries to test the features of the
+[Grafana](https://grafana.com) [GraphQL datasource
+plugin](https://github.com/fifemon/graphql-datasource). 
 
 ## Usage
 
-FIXME
+1. Run the server with [leiningen](https://github.com/technomancy/leiningen):
+
+    lein run
+    
+2. [Install
+   Grafana](https://grafana.com/docs/grafana/latest/installation/?pg=docs) and
+   the [GraphQL Datasource
+   Plugin](https://grafana.com/grafana/plugins/fifemon-graphql-datasource/?tab=installation).
+
+3. Add a GraphQL Datasource to Grafana pointing at the server (`http://localhost:8888/api`)
+
+5. Import the [sample
+   dashboard](https://raw.githubusercontent.com/fifemon/graphql-test-source/master/doc/graphql-test-dashboard.json)
+   into Grafana.
 
 ## License
 
-Copyright © 2021 FIXME
+Copyright © 2021 Fermi National Accelerator Laboratory
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
