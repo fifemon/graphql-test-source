@@ -2,8 +2,15 @@
  {:SimpleMetric
   {:description "metric value at a given timestamp"
    :fields
-   {:timestamp {:type (non-null String)}
-    :value {:type (non-null Float)}}}}
+   {:timestamp {:type String}
+    :value {:type Float}}}
+  :ComplexMetric
+  {:description "nested metric type"
+   :fields
+   {:group {:type String}
+    :value {:type Float}
+    :value_list {:type (list :SimpleMetric)}
+    :time {:type :SimpleMetric}}}}
 
  :queries
  {:simple_series
@@ -13,4 +20,12 @@
    {:from {:type (non-null String)}
     :to {:type (non-null String)}
     :interval_ms {:type Int :default-value 60000}}
-   :resolve :query/simple-series}}}
+   :resolve :query/simple-series}
+  :complex_series
+  {:type (list :ComplexMetric)
+   :description "Complex metric timeseries"
+   :args
+   {:from {:type (non-null String)}
+    :to {:type (non-null String)}
+    :interval_ms {:type Int :default-value 60000}}
+   :resolve :query/complex-series}}}
