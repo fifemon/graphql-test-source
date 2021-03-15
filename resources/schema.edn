@@ -4,10 +4,15 @@
    :fields
    {:timestamp {:type String}
     :value {:type Float}}}
+  :Group
+  {:description "collection of things"
+   :fields
+   {:id {:type String}
+    :name {:type String}}}
   :ComplexMetric
   {:description "nested metric type"
    :fields
-   {:group {:type String}
+   {:group {:type Group}
     :value {:type Float}
     :value_list {:type (list :SimpleMetric)}
     :time {:type :SimpleMetric}}}}

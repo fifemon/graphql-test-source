@@ -52,6 +52,10 @@
                (iterate (partial step interval_ms)
                         {:timestamp from :value (* (rand) 100.0)})))))
 
+(def groups [{:id "a" :name "foo"}
+             {:id "b" :name "bar"}
+             {:id "c" :name "baz"}])
+
 (defn resolve-complex-series
   [context args value]
   (let [{:keys [from to interval_ms]} args
@@ -60,7 +64,7 @@
         span (.until from to ChronoUnit/MILLIS)]
     (map (fn [x]
            (assoc {}
-                  :group "foo"
+                  :group (rand-nth groups)
                   :value (:value x)
                   :value_list (repeatedly 5 #(assoc {} :value (rand)))
                   :time {:timestamp (.toString (:timestamp x))}))
