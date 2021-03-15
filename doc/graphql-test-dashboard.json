@@ -27,6 +27,12 @@
       "id": "graph",
       "name": "Graph",
       "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
     }
   ],
   "annotations": {
@@ -39,6 +45,44 @@
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
         "type": "dashboard"
+      },
+      {
+        "aliasBy": "",
+        "annotationTags": "$field_group.name",
+        "annotationText": "$field_value",
+        "annotationTitle": "Group $field_group.name",
+        "constant": 6.5,
+        "dataPath": "complex_series",
+        "datasource": "${DS_TEST}",
+        "enable": false,
+        "endTimePath": "endTime",
+        "groupBy": "",
+        "hide": false,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "name": "complex",
+        "queryText": "query {\n  complex_series(from:\"${__from:date:iso}\",to:\"${__to:date:iso}\",interval_ms:3600000) {\n    time {timestamp}\n    value\n    group {id name}\n  }\n}",
+        "showIn": 0,
+        "timeFormat": "",
+        "timePath": "time.timestamp"
+      },
+      {
+        "aliasBy": "",
+        "annotationTags": "",
+        "annotationText": "",
+        "annotationTitle": "$field_value",
+        "constant": 6.5,
+        "dataPath": "simple_series",
+        "datasource": "${DS_TEST}",
+        "enable": false,
+        "endTimePath": "endTime",
+        "groupBy": "",
+        "hide": false,
+        "iconColor": "rgba(255, 96, 96, 1)",
+        "name": "simple",
+        "queryText": "query {\n  simple_series(from:\"${__from:date:iso}\",to:\"${__to:date:iso}\",interval_ms:3600000,format:\"MM.dd.uuuu HHmmss\") {\n    timestamp\n    value\n  }\n}",
+        "showIn": 0,
+        "timeFormat": "MM.DD.YYYY HHmmss",
+        "timePath": "timestamp"
       }
     ]
   },
@@ -467,6 +511,78 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "datasource": "${DS_TEST}",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 18
+      },
+      "id": 6,
+      "interval": null,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "7.4.2",
+      "targets": [
+        {
+          "aliasBy": "",
+          "annotationTags": "",
+          "annotationText": "",
+          "annotationTitle": "",
+          "constant": 6.5,
+          "dataPath": "complex_series",
+          "groupBy": "",
+          "queryText": "query {\n  complex_series(from:\"${__from:date:iso}\",to:\"${__to:date:iso}\",interval_ms:$__interval_ms) {\n    time {timestamp}\n    value\n    group {id name}\n  }\n}\n",
+          "refId": "A",
+          "timeFormat": null,
+          "timePath": "time.timestamp"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "transform",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "group.name": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "value": {
+                "aggregations": [
+                  "min",
+                  "max",
+                  "mean"
+                ],
+                "operation": "aggregate"
+              }
+            }
+          }
+        }
+      ],
+      "type": "table"
     }
   ],
   "refresh": false,
@@ -484,5 +600,5 @@
   "timezone": "",
   "title": "graphql test source",
   "uid": "YIhuYE8Gk",
-  "version": 5
+  "version": 7
 }
