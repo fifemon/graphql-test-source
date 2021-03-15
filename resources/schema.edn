@@ -15,7 +15,15 @@
    {:group {:type Group}
     :value {:type Float}
     :value_list {:type (list :SimpleMetric)}
-    :time {:type :SimpleMetric}}}}
+    :time {:type :SimpleMetric}}}
+  :Event
+  {:description "something happened at time or span"
+   :fields
+   {:timestamp {:type (non-null String)}
+    :end_timestamp {:type String}
+    :name {:type (non-null String)}
+    :description {:type String}
+    :tags {:type (list String)}}}}
 
  :queries
  {:simple_series
@@ -35,4 +43,15 @@
    {:from {:type (non-null String)}
     :to {:type (non-null String)}
     :interval_ms {:type Int :default-value 60000}}
-   :resolve :query/complex-series}}}
+   :resolve :query/complex-series}
+  :events
+  {:type (list :Event)
+   :description "Events with optional end time"
+   :args
+   {:from {:type (non-null String)}
+    :to {:type (non-null String)}
+    :format {:type String
+             :description "https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns"}
+    :count {:type Int :default-value 10}
+    :end {:type Boolean :default-value false}}
+   :resolve :query/events}}}

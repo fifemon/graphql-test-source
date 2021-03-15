@@ -37,6 +37,13 @@
                     (string? zone) (ZoneId/of zone)
                     :else (ZoneId/systemDefault))))))))
 
+(defn rand-instant
+  [after before]
+  (Instant/ofEpochSecond
+   (+ (.getEpochSecond after)
+      (rand-int (- (.getEpochSecond before)
+                   (.getEpochSecond after))))))
+
 (defn step [interval {:keys [timestamp value]}]
   {:timestamp (.plusMillis timestamp interval)
    :value (+ value (rand) -0.5)})
@@ -77,10 +84,47 @@
                  (iterate (partial step interval_ms)
                           {:timestamp from :value (* (rand) 100.0)})))))
 
+(defn make-event
+  []
+  (let [nouns ["datacenter" "computer" "toaster" "turtle" "container"]
+        verbs ["exploded" "restarted" "scrammed" "was updated" "rolled"]
+        quotes ["The only good bug is a dead bug!"
+                "What we've got here is a failure to communicate."
+                "When a body catches a body, comin' through the rye."
+                "Specialization is for the insects."
+                "Why oh why didn't I take the red pill?"
+                "Test event, please ignore."]
+        tags [nil "oops" "critical" "act-of-god"]]
+    {:name (str "The " (rand-nth nouns) " " (rand-nth verbs))
+     :description (rand-nth quotes)
+     :tags [(rand-nth tags)]}))
+
+(defn resolve-events
+  [context args value]
+  (let [{:keys [from to format count end]} args
+        from (timestamp->instant from)
+        to (timestamp->instant to)
+        formatter (if format
+                    (let [f (.withZone (DateTimeFormatter/ofPattern format)
+                                       (ZoneId/systemDefault))]
+                      (fn [t] (.format f t)))
+                    (fn [t] (.toString t)))]
+    (repeatedly
+     count
+     (fn []
+       (let [t (rand-instant from to)
+             te (.plusSeconds t (rand-int 3600))]
+         (merge
+          (make-event)
+          {:timestamp (formatter t)}
+          (when end
+            {:end_timestamp (formatter te)})))))))
+
 (defn resolver-map
   []
   {:query/simple-series resolve-simple-series
-   :query/complex-series resolve-complex-series})
+   :query/complex-series resolve-complex-series
+   :query/events resolve-events})
 
 (defn load-schema
   []
