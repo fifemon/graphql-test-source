@@ -7,4 +7,6 @@
                  [com.walmartlabs/lacinia-pedestal "0.15.0"]
                  [io.aviso/logging "0.2.0"]]
   :repl-options {:init-ns graphql-test-source.core}
-  :main graphql-test-source.server)
+  :main ^:skip-aot graphql-test-source.server
+  :profiles {:uberjar {:aot :all
+                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})

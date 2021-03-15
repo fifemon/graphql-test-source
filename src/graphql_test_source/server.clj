@@ -3,7 +3,8 @@
    [graphql-test-source.schema :as s]
    [io.pedestal.http :as http]
    [com.walmartlabs.lacinia.pedestal2 :as lp]
-   [com.walmartlabs.lacinia.schema :as schema]))
+   [com.walmartlabs.lacinia.schema :as schema])
+  (:gen-class))
 
 (def schema (s/load-schema))
 
