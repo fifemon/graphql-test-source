@@ -24,7 +24,9 @@
    :args
    {:from {:type (non-null String)}
     :to {:type (non-null String)}
-    :interval_ms {:type Int :default-value 60000}}
+    :interval_ms {:type Int :default-value 60000}
+    :format {:type String
+             :description "https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns"}}
    :resolve :query/simple-series}
   :complex_series
   {:type (list :ComplexMetric)

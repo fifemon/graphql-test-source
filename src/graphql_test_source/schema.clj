@@ -7,7 +7,7 @@
    [clojure.edn :as edn])
   (:import (java.time Instant ZoneId LocalDateTime ZonedDateTime)
            (java.time.temporal ChronoUnit)
-           (java.time.format DateTimeParseException)))
+           (java.time.format DateTimeParseException DateTimeFormatter)))
 
 (defn timestamp->instant
   "Parses timestamp to java.time.Instant instance.
@@ -43,11 +43,16 @@
 
 (defn resolve-simple-series
   [context args value]
-  (let [{:keys [from to interval_ms]} args
+  (let [{:keys [from to interval_ms format]} args
         from (timestamp->instant from)
         to (timestamp->instant to)
+        formatter (if format
+                    (let [f (.withZone (DateTimeFormatter/ofPattern format)
+                                       (ZoneId/systemDefault))]
+                      (fn [t] (.format f t)))
+                    (fn [t] (.toString t)))
         span (.until from to ChronoUnit/MILLIS)]
-    (map #(assoc % :timestamp (.toString (:timestamp %)))
+    (map #(assoc % :timestamp (formatter (:timestamp %)))
          (take (/ span interval_ms)
                (iterate (partial step interval_ms)
                         {:timestamp from :value (* (rand) 100.0)})))))
