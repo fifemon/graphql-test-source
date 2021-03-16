@@ -2,13 +2,17 @@
 
 A GraphQL server that provides queries to test the features of the
 [Grafana](https://grafana.com) [GraphQL datasource
-plugin](https://github.com/fifemon/graphql-datasource). 
+plugin](https://github.com/fifemon/graphql-datasource).
 
 ## Usage
 
 1. Run the server with [leiningen](https://github.com/technomancy/leiningen):
 
-    lein run
+    `lein run`
+    
+    or with Docker:
+    
+    `docker run -it --rm -p 8888:8888 retzkek/graphql-test-source`
     
 2. [Install
    Grafana](https://grafana.com/docs/grafana/latest/installation/?pg=docs) and
@@ -17,9 +21,7 @@ plugin](https://github.com/fifemon/graphql-datasource).
 
 3. Add a GraphQL Datasource to Grafana pointing at the server (`http://localhost:8888/api`)
 
-5. Import the [sample
-   dashboard](https://raw.githubusercontent.com/fifemon/graphql-test-source/master/doc/graphql-test-dashboard.json)
-   into Grafana.
+5. Import the [sample dashboard](https://grafana.com/grafana/dashboards/14079) into Grafana.
 
 ## License
 
