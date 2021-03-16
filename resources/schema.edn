@@ -42,7 +42,8 @@
    :args
    {:from {:type (non-null String)}
     :to {:type (non-null String)}
-    :interval_ms {:type Int :default-value 60000}}
+    :interval_ms {:type Int :default-value 60000}
+    :group_id {:type String}}
    :resolve :query/complex-series}
   :events
   {:type (list :Event)
@@ -54,4 +55,8 @@
              :description "https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html#patterns"}
     :count {:type Int :default-value 10}
     :end {:type Boolean :default-value false}}
-   :resolve :query/events}}}
+   :resolve :query/events}
+  :groups
+  {:type (list :Group)
+   :description "Get your dashboard variables here"
+   :resolve :query/groups}}}

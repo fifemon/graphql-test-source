@@ -68,15 +68,21 @@
              {:id "b" :name "bar"}
              {:id "c" :name "baz"}])
 
+(defn resolve-groups
+  [context args value]
+  groups)
+
 (defn resolve-complex-series
   [context args value]
-  (let [{:keys [from to interval_ms]} args
+  (let [{:keys [from to interval_ms group_id]} args
         from (timestamp->instant from)
         to (timestamp->instant to)
         span (.until from to ChronoUnit/MILLIS)]
     (map (fn [x]
            (assoc {}
-                  :group (rand-nth groups)
+                  :group (if group_id
+                           (some #(and (= (:id %) group_id) %) groups)
+                           (rand-nth groups))
                   :value (:value x)
                   :value_list (repeatedly 5 #(assoc {} :value (rand)))
                   :time {:timestamp (.toString (:timestamp x))}))
@@ -124,7 +130,8 @@
   []
   {:query/simple-series resolve-simple-series
    :query/complex-series resolve-complex-series
-   :query/events resolve-events})
+   :query/events resolve-events
+   :query/groups resolve-groups})
 
 (defn load-schema
   []
