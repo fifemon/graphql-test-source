@@ -9,7 +9,7 @@
 (def schema (s/load-schema))
 
 ;; Use default options:
-(def service (lp/default-service schema nil))
+(def service (lp/default-service schema {:host "0.0.0.0"}))
 
 ;; This is an adapted service map, that can be started and stopped
 ;; From the REPL you can call server/start and server/stop on this service
