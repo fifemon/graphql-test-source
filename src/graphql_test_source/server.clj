@@ -18,5 +18,5 @@
 (defn -main
   "The entry-point for 'lein run'"
   [& args]
-  (println "\nCreating your server...")
+  (println "\nCreating server listening on 0.0.0.0:8888...\n    GraphiQL at http://localhost:8888/ide\n    Query at http://localhost:8888/api")
   (http/start runnable-service))

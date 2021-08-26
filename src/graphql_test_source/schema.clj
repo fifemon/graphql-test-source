@@ -4,7 +4,8 @@
    [clojure.java.io :as io]
    [com.walmartlabs.lacinia.util :as util]
    [com.walmartlabs.lacinia.schema :as schema]
-   [clojure.edn :as edn])
+   [clojure.edn :as edn]
+   [clojure.core.async :refer [chan go-loop alt! timeout put!]])
   (:import (java.time Instant ZoneId LocalDateTime ZonedDateTime)
            (java.time.temporal ChronoUnit)
            (java.time.format DateTimeParseException DateTimeFormatter)))
@@ -133,10 +134,26 @@
    :query/events resolve-events
    :query/groups resolve-groups})
 
+(defn metric-streamer
+  [context args source-stream]
+  (let [{:keys [refresh]} args
+        ch (chan)]
+    (go-loop []
+      (source-stream {:timestamp (.toString (Instant/now)) :value (* (rand) 100.0)})
+      (alt!
+         (timeout refresh) (recur)
+         ch nil))
+    #(put! ch true)))
+
+(defn streamer-map
+  []
+  {:subscription/metric metric-streamer})
+
 (defn load-schema
   []
   (-> (io/resource "schema.edn")
       slurp
       edn/read-string
       (util/attach-resolvers (resolver-map))
+      (util/attach-streamers (streamer-map))
       schema/compile))

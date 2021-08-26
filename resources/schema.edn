@@ -59,4 +59,13 @@
   :groups
   {:type (list :Group)
    :description "Get your dashboard variables here"
-   :resolve :query/groups}}}
+   :resolve :query/groups}}
+
+ :subscriptions
+ {:metric
+  {:type :SimpleMetric
+   :description "Simple streaming metric"
+   :args
+   {:refresh {:type Int :default-value 1000 :description "refresh interval in milliseconds"}}
+   :stream :subscription/metric
+   }}}
